@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from utils import *
+
 app = Flask(__name__)
 CORS(app)
 
@@ -22,7 +23,9 @@ def api():
 @app.route('/prices', methods=['GET'])
 @cross_origin()
 def prices():
-    return get_coins_in_min_max("2d", 20)
+    days_back = request.args.get('days_back')
+    coins_quantity = request.args.get('coins_quantity')
+    return get_coins_in_min_max(days_back, coins_quantity)
 
 
 if __name__ == '__main__':
