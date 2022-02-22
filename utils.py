@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 from pprint import pprint
 
-coins_exceptions = ["ceth", "bttold", "icp",
+coins_exceptions = ["ceth", "bttold", "icp", "dot",
                     "heart", "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth"]
 
 
@@ -29,7 +29,6 @@ def symbols_usd(symbols_arr):
 def get_min_price(pair, period):
 
     ticker = yf.Ticker(pair)
-    ticker.get_info()
     df = ticker.history(period=period)
     min_price_date = {
         "pair": pair,
@@ -39,11 +38,10 @@ def get_min_price(pair, period):
     }
 
     for i, row in df.iterrows():
-        if ticker:
-            if row['Close'] < min_price_date['min']:
-                min_price_date['min'] = row['Close']
-                min_price_date['timestamp'] = datetime.timestamp(i)
-                min_price_date['date'] = i
+        if row['Close'] < min_price_date['min']:
+            min_price_date['min'] = row['Close']
+            min_price_date['timestamp'] = datetime.timestamp(i)
+            min_price_date['date'] = i
 
     return min_price_date
 
