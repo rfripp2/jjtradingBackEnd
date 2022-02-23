@@ -5,7 +5,7 @@ from datetime import datetime
 from pprint import pprint
 
 coins_exceptions = ["ceth", "bttold", "icp", "dot",
-                    "heart", "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth"]
+                    "heart", "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
 
 
 def getSymbols(ammount_of_coins):
