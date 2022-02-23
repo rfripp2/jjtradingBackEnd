@@ -4,7 +4,13 @@ from utils import *
 
 
 app = Flask(__name__)
-CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, resources={r"/*": {"origins": "*"}})
+CORS_ALLOW_ORIGIN = "*,*"
+CORS_EXPOSE_HEADERS = "*,*"
+CORS_ALLOW_HEADERS = "content-type,*"
+cors = CORS(app, origins=CORS_ALLOW_ORIGIN.split(","), allow_headers=CORS_ALLOW_HEADERS.split(
+    ","), expose_headers=CORS_EXPOSE_HEADERS.split(","),   supports_credentials=True)
 
 
 @app.route('/')
@@ -35,13 +41,15 @@ def coins_excluded():
     return json.dumps(coins_exceptions)
 
 
-@app.route('/minsmax/addcoin/', methods=['PUT'])
-@cross_origin()
+@app.route('/minsmax/addcoin/', methods=['PUT'], strict_slashes=False)
+@cross_origin(supports_credentials=True)
 def add_coin():
     coin = request.args.get('coin')
-    print(coin)
     coins_exceptions.append(coin)
-    return json.dumps(coins_exceptions)
+    response = json.dumps(coins_exceptions)
+
+    #response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 if __name__ == '__main__':
