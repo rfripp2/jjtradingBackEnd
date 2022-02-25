@@ -27,7 +27,6 @@ def coins_symbols_cg(quantity):
 
 
 def getSymbols(ammount_of_coins):
-    # return get_symbols_from_cmc(ammount_of_coins)
     return coins_symbols_cg(ammount_of_coins)
 
 

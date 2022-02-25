@@ -32,7 +32,9 @@ def api():
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
-    return get_coins_in_min_max(days_back, coins_quantity)
+    response = get_coins_in_min_max(days_back, coins_quantity)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @app.route('/minsmax/coinsexcluded', methods=['GET'])
