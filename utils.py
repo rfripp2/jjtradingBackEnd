@@ -7,8 +7,8 @@ from pprint import pprint
 
 start = datetime.now()
 
-coins_exceptions = ["ceth", "bttold", "icp",
-                    "heart", "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
+coins_exceptions = ["ceth", "bttold",
+                    "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
 
 
 def get_coins_inf_cg(quantity):
