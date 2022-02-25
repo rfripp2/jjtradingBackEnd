@@ -4,14 +4,13 @@ from utils import *
 
 
 app = Flask(__name__)
-#app.config['CORS_HEADERS'] = 'Content-Type'
-#CORS(app, resources={r"/*": {"origins": "*"}})
-#CORS_ALLOW_ORIGIN = "*,*"
-#CORS_EXPOSE_HEADERS = "*,*"
-#CORS_ALLOW_HEADERS = "content-type,*"
-# cors = CORS(app, origins=CORS_ALLOW_ORIGIN.split(","), allow_headers=CORS_ALLOW_HEADERS.split(
-#  ","), expose_headers=CORS_EXPOSE_HEADERS.split(","),   supports_credentials=True)
-CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, resources={r"/*": {"origins": "*"}})
+CORS_ALLOW_ORIGIN = "*"
+CORS_EXPOSE_HEADERS = "*"
+CORS_ALLOW_HEADERS = "content-type"
+cors = CORS(app, origins=CORS_ALLOW_ORIGIN, allow_headers=CORS_ALLOW_HEADERS,
+            expose_headers=CORS_EXPOSE_HEADERS,   supports_credentials=True)
 
 
 @app.route('/')
@@ -29,13 +28,13 @@ def api():
 
 
 @app.route('/minsmax', methods=['GET'])
-# @cross_origin()
+@cross_origin()
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
     response = jsonify(get_coins_in_min_max(days_back, coins_quantity))
-    response.headers.add('Access-Control-Allow-Origin',
-                         'https://jjtrading-rfripp2.vercel.app')
+    # response.headers.add('Access-Control-Allow-Origin',
+    # 'https://jjtrading-rfripp2.vercel.app')
     return response
 
 
