@@ -29,7 +29,7 @@ def api():
 
 
 @app.route('/minsmax', methods=['GET'])
-@cross_origin()
+# @cross_origin()
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
