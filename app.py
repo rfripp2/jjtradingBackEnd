@@ -24,7 +24,7 @@ def api():
 
 
 @app.route('/minsmax', methods=['GET'])
-@cross_origin(origin='https://jjtrading-rfripp2.vercel.app/', headers=['Content- Type', 'Authorization'])
+@cross_origin(origin='jjtrading-rfripp2.vercel.app', headers=['Content- Type', 'Authorization'])
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
