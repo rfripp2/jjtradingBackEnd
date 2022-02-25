@@ -4,7 +4,7 @@ from utils import *
 
 
 app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
+#app.config['CORS_HEADERS'] = 'Content-Type'
 #CORS(app, resources={r"/*": {"origins": "*"}})
 #CORS_ALLOW_ORIGIN = "*,*"
 #CORS_EXPOSE_HEADERS = "*,*"
