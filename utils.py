@@ -139,4 +139,4 @@ def get_coins_in_min_max(timeframe, ammount_of_coins):
         result['max']['total'] += 1
 
     print(result)
-    return json.dumps(result)
+    return result
