@@ -5,13 +5,8 @@ from utils import *
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, resources={
-     r"/*": {"origins": "https://jjtrading-rfripp2.vercel.app"}})
-CORS_ALLOW_ORIGIN = "*"
-CORS_EXPOSE_HEADERS = "*"
-CORS_ALLOW_HEADERS = "content-type"
-cors = CORS(app, origins=CORS_ALLOW_ORIGIN, allow_headers=CORS_ALLOW_HEADERS,
-            expose_headers=CORS_EXPOSE_HEADERS,   supports_credentials=True)
+cors = CORS(app, resources={
+            r"/foo": {"origins": "https://jjtrading-rfripp2.vercel.app"}})
 
 
 @app.route('/')
@@ -29,7 +24,7 @@ def api():
 
 
 @app.route('/minsmax', methods=['GET'])
-@cross_origin()
+@cross_origin(origin='https://jjtrading-rfripp2.vercel.app/', headers=['Content- Type', 'Authorization'])
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
