@@ -47,8 +47,6 @@ def add_coin():
     coin = request.args.get('coin')
     coins_exceptions.append(coin)
     response = json.dumps(coins_exceptions)
-
-    #response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 

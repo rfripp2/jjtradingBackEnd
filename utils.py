@@ -4,21 +4,31 @@ import json
 from datetime import datetime
 from pprint import pprint
 
+
 start = datetime.now()
 
-coins_exceptions = ["ceth", "bttold", "icp", "dot",
+coins_exceptions = ["ceth", "bttold", "icp",
                     "heart", "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
 
 
-def getSymbols(ammount_of_coins):
-    symbols_array = []
-    response = requests.get(
-        f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={ammount_of_coins}&page=1&sparkline=false")
+def get_coins_inf_cg(quantity):
+    coins = requests.get(
+        f'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={quantity}&page=1&sparkline=false')
+    return coins.json()
 
-    for coin in response.json():
+
+def coins_symbols_cg(quantity):
+    symbols = []
+    coins_inf = get_coins_inf_cg(quantity)
+    for coin in coins_inf:
         if coin['symbol'] not in coins_exceptions:
-            symbols_array.append(coin['symbol'])
-    return symbols_array
+            symbols.append(coin['symbol'])
+    return symbols
+
+
+def getSymbols(ammount_of_coins):
+    # return get_symbols_from_cmc(ammount_of_coins)
+    return coins_symbols_cg(ammount_of_coins)
 
 
 def symbols_usd(symbols_arr):
@@ -29,7 +39,6 @@ def symbols_usd(symbols_arr):
 
 
 def get_min_max_price(pair, period):
-
     ticker = yf.Ticker(pair)
     df = ticker.history(period=period)
     min_max_price_date = {
@@ -46,38 +55,20 @@ def get_min_max_price(pair, period):
             "timestamp": 0
         }
     }
-
-    for i, row in df.iterrows():
-        if row['Close'] < min_max_price_date['min']['min']:
-            min_max_price_date['min']['min'] = row['Close']
-            min_max_price_date['min']['timestamp'] = datetime.timestamp(i)
-            min_max_price_date['min']['date'] = i
-        elif row['Close'] > min_max_price_date['max']['max']:
-            min_max_price_date['max']['max'] = row['Close']
-            min_max_price_date['max']['timestamp'] = datetime.timestamp(i)
-            min_max_price_date['max']['date'] = i
+    if not df.empty and ticker.info:
+        for i, row in df.iterrows():
+            if row['Close'] < min_max_price_date['min']['min']:
+                min_max_price_date['min']['min'] = row['Close']
+                min_max_price_date['min']['timestamp'] = datetime.timestamp(
+                    i)
+                min_max_price_date['min']['date'] = i
+            elif row['Close'] > min_max_price_date['max']['max']:
+                min_max_price_date['max']['max'] = row['Close']
+                min_max_price_date['max']['timestamp'] = datetime.timestamp(
+                    i)
+                min_max_price_date['max']['date'] = i
 
     return min_max_price_date
-
-
-def get_max_price(pair, period):
-    ticker = yf.Ticker(pair)
-    df = ticker.history(period=period)
-    max_price_date = {
-        "pair": pair,
-        "min": df['Close'][0],
-        "date": None,
-        "timestamp": 0
-    }
-
-    for i, row in df.iterrows():
-        if ticker:
-            if row['Close'] > max_price_date['min']:
-                max_price_date['min'] = row['Close']
-                max_price_date['timestamp'] = datetime.timestamp(i)
-                max_price_date['date'] = i
-
-    return max_price_date
 
 
 def filter_today(array):
@@ -93,18 +84,25 @@ def filter_today(array):
 def get_mins_max_list(timeframe, ammount_of_coins):
     result = {
         "mins": [],
-        "max": []
+        "max": [],
     }
     today = {
         "mins": None,
-        "max": None
+        "max": None,
+        "tracked": 0,
+        'errors': []
     }
     coins = getSymbols(ammount_of_coins)
     coins_usd = symbols_usd(coins)
     for coin in coins_usd:
-        minmax = get_min_max_price(coin, timeframe)
-        result['mins'].append(minmax['min'])
-        result['max'].append(minmax['max'])
+        try:
+            minmax = get_min_max_price(coin, timeframe)
+            result['mins'].append(minmax['min'])
+            result['max'].append(minmax['max'])
+            today['tracked'] += 1
+        except IndexError:
+            today['errors'].append(coin)
+            continue
     today['mins'] = filter_today(result['mins'])
     today['max'] = filter_today(result['max'])
     return today
@@ -121,12 +119,17 @@ def get_coins_in_min_max(timeframe, ammount_of_coins):
             "coins": [],
             "total": 0
         },
-        "coins_tracking": ammount_of_coins
+        "coins_without_exceptions": ammount_of_coins,
+        "coins_tracked_after": None,
+        'coins_errors': ["a"]
+
     }
 
     mins_max_list = get_mins_max_list(timeframe, ammount_of_coins)
     coins_list_min = mins_max_list['mins']
     coins_list_max = mins_max_list['max']
+    result['coins_tracked_after'] = mins_max_list['tracked']
+    result['coins_errors'] = mins_max_list['errors']
     for coin in coins_list_min:
         coin['pair'] = coin['pair'].replace("-USD", "")
         result['min']['coins'].append(coin['pair'])
@@ -136,5 +139,5 @@ def get_coins_in_min_max(timeframe, ammount_of_coins):
         result['max']['coins'].append(coin['pair'])
         result['max']['total'] += 1
 
-    pprint(result)
+    print(result)
     return json.dumps(result)
