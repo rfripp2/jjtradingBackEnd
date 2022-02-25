@@ -28,7 +28,7 @@ def api():
 
 
 @app.route('/minsmax', methods=['GET'])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
@@ -47,6 +47,7 @@ def add_coin():
     coin = request.args.get('coin')
     coins_exceptions.append(coin)
     response = json.dumps(coins_exceptions)
+
     return response
 
 
