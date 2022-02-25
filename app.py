@@ -5,7 +5,8 @@ from utils import *
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={
+     r"/*": {"origins": "https://jjtrading-rfripp2.vercel.app"}})
 CORS_ALLOW_ORIGIN = "*"
 CORS_EXPOSE_HEADERS = "*"
 CORS_ALLOW_HEADERS = "content-type"
