@@ -28,7 +28,6 @@ def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
     response = jsonify(get_coins_in_min_max(days_back, coins_quantity))
-    response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 
