@@ -4,7 +4,8 @@ from utils import *
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+cors = CORS(app, resources={
+            r"/api/*": {"origins": "*"}}, support_credentials=True)
 
 
 @app.route('/')
@@ -22,7 +23,7 @@ def api():
 
 
 @app.route('/api/minsmax', methods=['GET'])
-@cross_origin()
+@cross_origin(origin='https://jjtrading-rfripp2.vercel.app/', headers=['Content- Type', 'Authorization'])
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
