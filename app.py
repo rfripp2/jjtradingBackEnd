@@ -22,7 +22,7 @@ def api():
     }
 
 
-@app.route('/api/minsmax', methods=['GET'], strict_slashes=False)
+@app.route('/api/minsmax', methods=['GET'], strict_slashes=False, headers=['Content-Type', 'Authorization'])
 @cross_origin()
 def prices():
     days_back = request.args.get('days_back')
