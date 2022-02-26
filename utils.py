@@ -1,8 +1,6 @@
 import requests
 import yfinance as yf
-import json
 from datetime import datetime
-from pprint import pprint
 
 
 start = datetime.now()
