@@ -1,11 +1,14 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
 from utils import *
+from flask_cors import CORS, cross_origin
+from flask import Flask, request, jsonify
 
 
 app = Flask(__name__)
 cors = CORS(app, resources={
             r"/api/*": {"origins": "*"}}, support_credentials=True)
+
+if __name__ == '__main__':
+    app.run()
 
 
 @app.route('/')
@@ -45,7 +48,3 @@ def add_coin():
     response = json.dumps(coins_exceptions)
 
     return response
-
-
-if __name__ == '__main__':
-    app.run()
