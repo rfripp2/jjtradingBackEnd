@@ -139,7 +139,3 @@ def get_coins_in_min_max(timeframe, ammount_of_coins):
 
     print(result)
     return result
-
-
-print("digital ocean")
-get_coins_in_min_max("2d", 5)
