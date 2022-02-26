@@ -5,6 +5,7 @@ from utils import *
 
 app = Flask(__name__)
 CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route('/')
@@ -22,7 +23,7 @@ def api():
 
 
 @app.route('/api/minsmax', methods=['GET'], strict_slashes=False)
-@cross_origin(headers=['Content-Type', 'Authorization'])
+@cross_origin()
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
