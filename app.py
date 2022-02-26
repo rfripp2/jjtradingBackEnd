@@ -4,8 +4,7 @@ from utils import *
 
 
 app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 @app.route('/')
@@ -22,8 +21,8 @@ def api():
     }
 
 
-@app.route('/minsmax', methods=['GET'])
-@cross_origin(origin='https://jjtrading-rfripp2.vercel.app', headers=['Content- Type', 'Authorization'], supports_credentials=True)
+@app.route('/api/minsmax', methods=['GET'])
+@cross_origin()
 def prices():
     days_back = request.args.get('days_back')
     coins_quantity = request.args.get('coins_quantity')
@@ -31,14 +30,14 @@ def prices():
     return response
 
 
-@app.route('/minsmax/coinsexcluded', methods=['GET'])
-@cross_origin(origin='https://jjtrading-rfripp2.vercel.app', supports_credentials=True)
+@app.route('/api/minsmax/coinsexcluded', methods=['GET'])
+@cross_origin()
 def coins_excluded():
     return json.dumps(coins_exceptions)
 
 
-@app.route('/minsmax/addcoin/', methods=['PUT'], strict_slashes=False)
-@cross_origin(supports_credentials=True)
+@app.route('/api/minsmax/addcoin/', methods=['PUT'], strict_slashes=False)
+@cross_origin()
 def add_coin():
     coin = request.args.get('coin')
     coins_exceptions.append(coin)
