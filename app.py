@@ -7,9 +7,6 @@ app = Flask(__name__)
 cors = CORS(app, resources={
             r"/api/*": {"origins": "*"}}, support_credentials=True)
 
-if __name__ == '__main__':
-    app.run()
-
 
 @app.route('/')
 @cross_origin()
@@ -48,3 +45,7 @@ def add_coin():
     response = json.dumps(coins_exceptions)
 
     return response
+
+
+if __name__ == '__main__':
+    app.run()
