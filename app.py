@@ -4,8 +4,7 @@ from utils import *
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={
-            r"/api/*": {"origins": "*"}}, support_credentials=True)
+CORS(app)
 
 
 @app.route('/')
