@@ -4,8 +4,7 @@ from flask import Flask, request, jsonify
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={
-            r"/api/*": {"origins": "*"}}, support_credentials=True)
+cors = CORS(app)
 
 
 @app.route('/')
