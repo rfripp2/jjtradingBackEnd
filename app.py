@@ -16,7 +16,7 @@ def index():
 @cross_origin()
 def api():
     return{
-        "tutorial": "Flask React Herokuu"
+        "tutorial": "Flask React Herokuuu"
     }
 
 
