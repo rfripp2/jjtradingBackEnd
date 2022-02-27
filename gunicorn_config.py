@@ -1,2 +1,3 @@
-bind = "0.0.0.0:8080"
+bind = "https://jjtrading-yzukr.ondigitalocean.app/"
 workers = 2
+timeout = 600
