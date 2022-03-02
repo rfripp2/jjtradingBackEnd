@@ -43,7 +43,7 @@ def is_today_min_high(pair, period):
     result = {
         "min": False,
         "max": False,
-        "error_coins": []
+        "error": False
     }
     min = df['Close'][0],
     max = df['Close'][0],
@@ -59,7 +59,7 @@ def is_today_min_high(pair, period):
         elif max == df['Close'].iloc[-1]:
             result['max'] = True
     else:
-        result['error_coins'].append(pair)
+        result['error'] = True
     return result
 
 
