@@ -20,12 +20,29 @@ def api():
     }
 
 
-@app.route('/api/minsmax', methods=['GET'])
+@app.route('/api/coins/<quantity>', methods=['GET'])
+@cross_origin()
+def getCoins(quantity):
+    coins = jsonify(getSymbols(quantity))
+    return coins
+
+
+@app.route('/api/min_today', methods=['GET'])
 @cross_origin(headers=['Content-Type', 'Authorization'])
-def prices():
+def min_today():
     days_back = request.args.get('days_back')
-    coins_quantity = request.args.get('coins_quantity')
-    response = jsonify(get_coins_in_min_max(days_back, coins_quantity))
+    pair = request.args.get('pair')
+    response = jsonify(is_today_min_high(pair, days_back))
+    print(response)
+    return response
+
+
+@app.route('/api/max_today', methods=['GET'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
+def max_today():
+    days_back = request.args.get('days_back')
+    pair = request.args.get('pair')
+    response = jsonify(is_today_high(pair, days_back))
     return response
 
 

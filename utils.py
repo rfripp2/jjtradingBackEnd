@@ -6,13 +6,13 @@ from datetime import datetime
 
 start = datetime.now()
 
-coins_exceptions = ["ceth", "bttold",
+coins_exceptions = ["ceth", "dot", "bttold",
                     "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
 
 
 def get_coins_inf_cg(quantity):
     coins = requests.get(
-        f'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={quantity}&page=1&sparkline=false')
+        f'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={quantity}&page=1&sparkline=false', timeout=6)
     return coins.json()
 
 
@@ -36,47 +36,43 @@ def symbols_usd(symbols_arr):
     return symbols
 
 
-def get_min_max_price(pair, period):
+def is_today_min_high(pair, period):
     ticker = yf.Ticker(pair)
     df = ticker.history(period=period)
-    min_max_price_date = {
-        'min': {
-            "pair": pair,
-            "min": df['Close'][0],
-            "date": None,
-            "timestamp": 0
-        },
-        'max': {
-            "pair": pair,
-            "max": df['Close'][0],
-            "date": None,
-            "timestamp": 0
-        }
+    result = {
+        "min": False,
+        "max": False
     }
+    min = df['Close'][0],
+    max = df['Close'][0],
+
     if not df.empty and ticker.info:
         for i, row in df.iterrows():
-            if row['Close'] < min_max_price_date['min']['min']:
-                min_max_price_date['min']['min'] = row['Close']
-                min_max_price_date['min']['timestamp'] = datetime.timestamp(
-                    i)
-                min_max_price_date['min']['date'] = i
-            elif row['Close'] > min_max_price_date['max']['max']:
-                min_max_price_date['max']['max'] = row['Close']
-                min_max_price_date['max']['timestamp'] = datetime.timestamp(
-                    i)
-                min_max_price_date['max']['date'] = i
-
-    return min_max_price_date
+            if row['Close'] < min:
+                min = row['Close']
+            elif row['Close'] > max:
+                max = row['Close']
+        if min == df['Close'].iloc[-1]:
+            result['min'] = True
+        elif max == df['Close'].iloc[-1]:
+            result['max'] = True
+    return result
 
 
-def filter_today(array):
-    now = datetime.now()
-    filtered = []
-    timestamp_now = datetime.timestamp(now)
-    for coin in array:
-        if coin['timestamp'] + 86400 >= timestamp_now:
-            filtered.append(coin)
-    return filtered
+def is_today_high(pair, period):
+    ticker = yf.Ticker(pair)
+    df = ticker.history(period=period)
+    max = df['Close'][0],
+
+    if not df.empty and ticker.info:
+        for i, row in df.iterrows():
+            if row['Close'] > min:
+                max = row['Close']
+        if max == df['Close'].iloc[-1]:
+            print("last row", row['Close'])
+            return True
+        else:
+            return False
 
 
 def get_mins_max_list(timeframe, ammount_of_coins):
