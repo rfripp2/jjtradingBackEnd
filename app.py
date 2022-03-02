@@ -27,7 +27,7 @@ def getCoins(quantity):
     return coins
 
 
-@app.route('/api/min_today', methods=['GET'])
+@app.route('/api/min_max_today', methods=['GET'])
 @cross_origin(headers=['Content-Type', 'Authorization'])
 def min_today():
     days_back = request.args.get('days_back')

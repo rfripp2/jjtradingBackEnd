@@ -1,3 +1,4 @@
+from flask import jsonify
 import requests
 import yfinance as yf
 import json
@@ -41,7 +42,8 @@ def is_today_min_high(pair, period):
     df = ticker.history(period=period)
     result = {
         "min": False,
-        "max": False
+        "max": False,
+        "error_coins": []
     }
     min = df['Close'][0],
     max = df['Close'][0],
@@ -56,6 +58,8 @@ def is_today_min_high(pair, period):
             result['min'] = True
         elif max == df['Close'].iloc[-1]:
             result['max'] = True
+    else:
+        result['error_coins'].append(pair)
     return result
 
 
