@@ -58,7 +58,6 @@ def add_coin():
     coin = request.args.get('coin')
     coins_exceptions.append(coin)
     response = json.dumps(coins_exceptions)
-
     return response
 
 
