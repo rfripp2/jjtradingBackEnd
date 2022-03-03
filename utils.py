@@ -7,7 +7,7 @@ from datetime import datetime
 
 start = datetime.now()
 
-coins_exceptions = ["ceth", "dot", "bttold", "wbtc"
+coins_exceptions = ["ceth", "dot", "bttold", "wbtc",
                     "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
 
 
