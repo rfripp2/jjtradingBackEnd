@@ -7,8 +7,8 @@ from datetime import datetime
 
 start = datetime.now()
 
-coins_exceptions = ["ceth", "dot", "bttold",
-                    "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "comp", "syn", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
+coins_exceptions = ["ceth", "dot", "bttold", "wbtc"
+                    "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
 
 
 def get_coins_inf_cg(quantity):
@@ -45,8 +45,6 @@ def is_today_min_high(pair, period):
         "max": False,
         "error": False
     }
-    min = df['Close'][0],
-    max = df['Close'][0],
 
     if not df.empty and ticker.info:
         for i, row in df.iterrows():
@@ -58,6 +56,8 @@ def is_today_min_high(pair, period):
             result['min'] = True
         elif max == df['Close'].iloc[-1]:
             result['max'] = True
+        print(min)
+        print(df['Close'].iloc[-1])
     else:
         result['error'] = True
     return result
@@ -77,3 +77,6 @@ def is_today_high(pair, period):
             return True
         else:
             return False
+
+
+is_today_min_high("bnb-usd", "2d")
