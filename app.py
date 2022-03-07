@@ -37,15 +37,6 @@ def min_today():
     return response
 
 
-@app.route('/api/max_today', methods=['GET'])
-@cross_origin(headers=['Content-Type', 'Authorization'])
-def max_today():
-    days_back = request.args.get('days_back')
-    pair = request.args.get('pair')
-    response = jsonify(is_today_high(pair, days_back))
-    return response
-
-
 @app.route('/api/minsmax/coinsexcluded', methods=['GET'])
 @cross_origin()
 def coins_excluded():
