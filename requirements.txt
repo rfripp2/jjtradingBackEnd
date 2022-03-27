@@ -78,7 +78,7 @@ python-dotenv==0.20.0
 pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
 regex==2022.3.15
-requests==2.27.1
+requests==2.25.1
 requests-mock==1.9.3
 rlp==3.0.0
 service-identity==21.1.0
