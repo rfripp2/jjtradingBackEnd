@@ -68,7 +68,7 @@ pyasn1-modules==0.2.8
 pycodestyle==2.8.0
 pycparser==2.21
 pycryptodome==3.14.1
-pyOpenSSL==22.0.0
+pyOpenSSL==19.0.0
 pyparsing==3.0.7
 pyrsistent==0.18.1
 pytest==7.1.1
