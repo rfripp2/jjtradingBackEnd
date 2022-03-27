@@ -59,12 +59,6 @@ def funding_rate():
     return get_funding_rate()
 
 
-@app.route('/api/dydx_funding', methods=['GET'])
-@cross_origin()
-def dydyx():
-    return dydx_funding()
-
-
 @app.route('/api/binance_funding', methods=['GET'])
 @cross_origin()
 def binance_funding():
