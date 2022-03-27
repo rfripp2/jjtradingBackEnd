@@ -20,6 +20,7 @@ cryptography==36.0.1
 cytoolz==0.11.2
 dateparser==1.0.0
 distlib==0.3.4
+dydx-v3-python==1.4.6
 ecdsa==0.16.0
 eth-abi==2.1.1
 eth-account==0.5.7
