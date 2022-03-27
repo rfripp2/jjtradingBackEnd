@@ -1,9 +1,22 @@
+from tracemalloc import start
 from flask import jsonify
 import requests
 import yfinance as yf
 import json
 from datetime import datetime
-
+from dydx3.constants import MARKET_BTC_USD
+# from dydx3 import Client
+import os
+from dotenv import load_dotenv
+import time
+import websocket
+from binance.client import Client
+import asyncio
+import time
+from binance.futures import Futures as Client_Futures
+from binance.lib.utils import config_logging
+import logging
+load_dotenv()
 
 coins_exceptions = ["ceth", "dot", "bttold", "wbtc",
                     "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
@@ -59,8 +72,9 @@ def is_today_min_high(pair, period):
     min = df['Close'][0]
     max = df['Close'][0]
 
-    if not df.empty and ticker.info:
+    if not df.empty and ticker.info and len(df) > 1:
         for i, row in df.iterrows():
+            print("length:", len(df))
             print(row['Close'])
             # El ciclo FOR va iterando vela por vela, si la vela atual es menor que min, min pasa a ser la vela actual
             if row['Close'] < min:
@@ -80,7 +94,42 @@ def is_today_min_high(pair, period):
     # La funcion retorna un objeto con Min,Max,Error que van a tener valores booleanso (True o False), en el front cuando hago este request a x moneda, si me retorna true,la muestra en la lista de min,max o error
     return result
 
+
 # Estas funciones las importo en otro archivo que es nuestra API (con la que nos comunicamos desde el front),por ej en la web,hacemos un request a jjtradingapi/api/minsMax, nuestra api en ese endpoint retorna la funcion is_today_min_max(), asi como goingecko retorna X cuando hacemos el request a su endpoint.
+# client_dydx = Client(host='https://api.dydx.exchange')
 
 
-is_today_min_high('atom', '7d')
+def get_funding_rate():
+    url = 'https://open-api.coinglass.com/api/pro/v1/futures/funding_rates_chart?symbol=BTC&type=U'
+    headers = {
+        'coinglassSecret': 'dc9b936244504e75a9582dcc7c728908'
+    }
+    response = requests.request('GET', url, headers=headers)
+    response = response.json()
+    return response
+
+
+binance_key = os.environ.get('BINANCE_API_KEY')
+binance_secret_key = os.environ.get('BINANCE_SECRET_KEY')
+
+client = Client(binance_key, binance_secret_key)
+
+# client_binance = Client(binance_key, binance_secret_key)
+
+# client_futures = Futures(binance_key, binance_secret_key)
+
+
+def funding_rate_binance():
+    futures_client = Client_Futures()
+    return futures_client.funding_rate("BTCUSDT", **{'limit': 1000})
+
+
+def historical_price_binance(interval):
+    spot_client = Client(binance_key, binance_secret_key)
+    data = spot_client.get_klines(
+        symbol="BTCUSDT", interval=interval, limit=1000)
+
+    return data
+
+
+is_today_min_high('algo-usd', '7d')
