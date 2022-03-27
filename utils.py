@@ -4,7 +4,6 @@ import requests
 import yfinance as yf
 import json
 from datetime import datetime
-from dydx3.constants import MARKET_BTC_USD
 # from dydx3 import Client
 import os
 from dotenv import load_dotenv
