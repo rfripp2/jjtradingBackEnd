@@ -119,3 +119,6 @@ def historical_price_binance(interval):
         symbol="BTCUSDT", interval=interval, limit=1000)
 
     return data
+
+
+#is_today_min_high("stx-usd", "7d")
