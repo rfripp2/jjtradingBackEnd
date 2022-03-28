@@ -9,7 +9,7 @@ from binance.client import Client
 
 
 coins_exceptions = ["ceth", "dot", "bttold", "wbtc",
-                    "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
+                    "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn", "stx", "ape"]
 
 
 # Request al endpoint de coingecko,por pagina max 250, osea que tengo que ajustar la funcion para que si se piden mas de 250, haga otro request a la page=2
@@ -121,4 +121,4 @@ def historical_price_binance(interval):
     return data
 
 
-#is_today_min_high("stx-usd", "7d")
+is_today_min_high("stx-usd", "7d")
