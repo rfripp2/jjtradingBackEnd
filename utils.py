@@ -1,21 +1,12 @@
-from tracemalloc import start
+
 from flask import jsonify
 import requests
 import yfinance as yf
-import json
 from datetime import datetime
-# from dydx3 import Client
 import os
-from dotenv import load_dotenv
-import time
-import websocket
 from binance.client import Client
-import asyncio
-import time
-from binance.futures import Futures as Client_Futures
-from binance.lib.utils import config_logging
-import logging
-load_dotenv()
+#from binance.futures import Futures as Client_Futures
+
 
 coins_exceptions = ["ceth", "dot", "bttold", "wbtc",
                     "usdc", "usdt", "mim", "cdai", "ust", "busd", "tusd", "dai", "xaut", "paxg", "frax", "cusdc", "hbtc", "usdp", "cusdt", "renbtc", "fei", "cvxcrv", "steth", "lusd", "usdn"]
@@ -111,7 +102,6 @@ def get_funding_rate():
 binance_key = os.environ.get('BINANCE_API_KEY')
 binance_secret_key = os.environ.get('BINANCE_SECRET_KEY')
 
-client = Client(binance_key, binance_secret_key)
 
 # client_binance = Client(binance_key, binance_secret_key)
 
