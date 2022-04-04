@@ -54,7 +54,6 @@ def is_today_min_high(pair, period):
     ticker = yf.Ticker(pair)
     day_index = period.index("d")
     days = period[0:day_index]
-    print("dayss", days)
 
     df = ticker.history(period=period)
     result = {
@@ -68,6 +67,7 @@ def is_today_min_high(pair, period):
     print(len(df), days)
     if not df.empty and ticker.info and len(df) == int(days):
         for i, row in df.iterrows():
+            print(df['Close'][i])
 
             # El ciclo FOR va iterando vela por vela, si la vela atual es menor que min, min pasa a ser la vela actual
             if row['Close'] < min:
@@ -84,6 +84,7 @@ def is_today_min_high(pair, period):
             result['max'] = True
     else:
         result['error'] = True
+
     print("result", result)
     # La funcion retorna un objeto con Min,Max,Error que van a tener valores booleanso (True o False), en el front cuando hago este request a x moneda, si me retorna true,la muestra en la lista de min,max o error
     return result
@@ -125,4 +126,4 @@ def historical_price_binance(interval):
     return data
 
 
-is_today_min_high("sol-usd", "10d")
+is_today_min_high("sol-usd", "7d")

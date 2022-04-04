@@ -34,9 +34,9 @@ def getCoins(quantity):
 def min_today():
     days_back = request.args.get('days_back')
     pair = request.args.get('pair')
-    response = jsonify(is_today_min_high(pair, days_back))
+    response = is_today_min_high(pair, days_back)
     print(response)
-    return response
+    return jsonify(response)
 
 
 @app.route('/api/minsmax/coinsexcluded', methods=['GET'])
