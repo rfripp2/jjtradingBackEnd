@@ -54,6 +54,7 @@ def is_today_min_high(pair, period):
     ticker = yf.Ticker(pair)
     day_index = period.index("d")
     days = period[0:day_index]
+    print("dayss", days)
 
     df = ticker.history(period=period)
     result = {
@@ -64,10 +65,10 @@ def is_today_min_high(pair, period):
     # Inicializa min y max como la primera vela
     min = df['Close'][0]
     max = df['Close'][0]
-
-    if not df.empty and ticker.info and len(df) == days:
+    print(len(df), days)
+    if not df.empty and ticker.info and len(df) == int(days):
         for i, row in df.iterrows():
-            print(row['Close'])
+
             # El ciclo FOR va iterando vela por vela, si la vela atual es menor que min, min pasa a ser la vela actual
             if row['Close'] < min:
                 min = row['Close']
