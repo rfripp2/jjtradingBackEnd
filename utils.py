@@ -123,4 +123,4 @@ def historical_price_binance(interval):
     return data
 
 
-is_today_min_high("atom-usd", "7d")
+is_today_min_high("sol-usd", "7d")
