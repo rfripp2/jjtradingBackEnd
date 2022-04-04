@@ -52,6 +52,9 @@ def symbols_usd(symbols_arr):
 # df = dataframe, es una libreria de python para trabajar la inf comodamente
 def is_today_min_high(pair, period):
     ticker = yf.Ticker(pair)
+    day_index = period.index("d")
+    days = period[0:day_index]
+
     df = ticker.history(period=period)
     result = {
         "min": False,
@@ -61,11 +64,9 @@ def is_today_min_high(pair, period):
     # Inicializa min y max como la primera vela
     min = df['Close'][0]
     max = df['Close'][0]
-    # print(df)
 
-    if not df.empty and ticker.info and len(df) > 1:
+    if not df.empty and ticker.info and len(df) == days:
         for i, row in df.iterrows():
-            print("length:", len(df))
             print(row['Close'])
             # El ciclo FOR va iterando vela por vela, si la vela atual es menor que min, min pasa a ser la vela actual
             if row['Close'] < min:
@@ -123,4 +124,4 @@ def historical_price_binance(interval):
     return data
 
 
-is_today_min_high("sol-usd", "7d")
+is_today_min_high("sol-usd", "10d")
