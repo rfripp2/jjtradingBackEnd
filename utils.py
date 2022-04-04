@@ -61,6 +61,7 @@ def is_today_min_high(pair, period):
     # Inicializa min y max como la primera vela
     min = df['Close'][0]
     max = df['Close'][0]
+    # print(df)
 
     if not df.empty and ticker.info and len(df) > 1:
         for i, row in df.iterrows():
@@ -74,6 +75,7 @@ def is_today_min_high(pair, period):
         # .iloc[-1] equivale a la ultima vela, entonces si min = ultima vela,quiere decir que la vela actual (hoy),esta en minimos
         print("max", max)
         print("min:", min)
+        print("last:", df['Close'].iloc[-1])
         if min == df['Close'].iloc[-1]:
             result['min'] = True
         elif max == df['Close'].iloc[-1]:
@@ -121,4 +123,4 @@ def historical_price_binance(interval):
     return data
 
 
-is_today_min_high("stx-usd", "7d")
+is_today_min_high("atom-usd", "7d")
