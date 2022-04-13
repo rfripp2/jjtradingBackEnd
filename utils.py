@@ -3,9 +3,11 @@ from flask import jsonify
 import requests
 import yfinance as yf
 from datetime import datetime, timedelta
+import time
 import os
 from binance.client import Client
-#from binance.futures import Futures as Client_Futures
+# from binance.futures import Futures as Client_Futures
+from binance.spot import Spot
 
 
 coins_exceptions = ["ceth", "dot", "bttold", "wbtc",
@@ -84,7 +86,7 @@ def is_today_min_high(pair, period):
             result['max'] = True
     else:
         result['error'] = True
-        return coin_api(coin, int(days))
+        return mins_max_binance(coin, int(days))
 
     print("result", result)
     # La funcion retorna un objeto con Min,Max,Error que van a tener valores booleanso (True o False), en el front cuando hago este request a x moneda, si me retorna true,la muestra en la lista de min,max o error
@@ -142,6 +144,7 @@ def get_initial_date_from_days_back(daysback):
 def coin_api(coin, daysback):
     print("hello from coin api")
     days_back = get_initial_date_from_days_back(daysback)
+    print(days_back)
     now = datetime.now().replace(microsecond=00).isoformat()
     coin = coin.upper()
 
@@ -155,6 +158,7 @@ def coin_api(coin, daysback):
         "max": False,
         "error": False
     }
+    print(data)
     min = data[0]['rate_close']
     max = data[0]['rate_close']
     for candle in data:
@@ -169,3 +173,42 @@ def coin_api(coin, daysback):
         result['max'] = True
     print(result)
     return result
+
+
+def mins_max_binance(coin, daysback):
+    print("this is binance api")
+    client = Spot()
+    msnow = int(round(time.time() * 1000))
+    symbol = coin.upper() + "USDT"
+    print(symbol)
+    start_date = datetime.today().replace(
+        hour=21, minute=00, second=00, microsecond=00) - timedelta(days=daysback)
+    print(start_date)
+    start_miliseconds = round(datetime.timestamp(start_date))
+    print(start_miliseconds * 1000)
+    response = client.klines(
+        startTime=start_miliseconds * 1000, symbol=symbol, interval="1d")
+    print(response)
+    print(len(response))
+    result = {
+        "min": False,
+        "max": False,
+        "error": False
+    }
+    min = response[0][4]
+    max = response[0][4]
+    for candle in response:
+        if candle[4] < min:
+            min = candle[4]
+        elif candle[4] > max:
+            max = candle[4]
+    if response[-1][4] == min:
+        result['min'] = True
+    elif response[-1][4] == max:
+        result['max'] = True
+    print(result)
+    return result
+
+
+#mins_max_binance("icp", 2)
+# print(get_initial_date_from_days_back(7))
