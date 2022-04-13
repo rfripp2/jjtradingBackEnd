@@ -65,12 +65,12 @@ def is_today_min_high(pair, period):
         "error": False
     }
     # Inicializa min y max como la primera vela
-    min = df['Close'][0]
-    max = df['Close'][0]
+
     print(len(df), days)
     print(period)
-    print(df)
     if not df.empty and ticker.info and len(df) == int(days):
+        min = df['Close'][0]
+        max = df['Close'][0]
         for i, row in df.iterrows():
 
             # El ciclo FOR va iterando vela por vela, si la vela atual es menor que min, min pasa a ser la vela actual
@@ -88,7 +88,6 @@ def is_today_min_high(pair, period):
         result['error'] = True
         return mins_max_binance(coin, int(days))
 
-    print("result", result)
     # La funcion retorna un objeto con Min,Max,Error que van a tener valores booleanso (True o False), en el front cuando hago este request a x moneda, si me retorna true,la muestra en la lista de min,max o error
     return result
 
@@ -183,13 +182,12 @@ def mins_max_binance(coin, daysback):
     print(symbol)
     start_date = datetime.today().replace(
         hour=21, minute=00, second=00, microsecond=00) - timedelta(days=daysback)
-    print(start_date)
+
     start_miliseconds = round(datetime.timestamp(start_date))
-    print(start_miliseconds * 1000)
+
     response = client.klines(
         startTime=start_miliseconds * 1000, symbol=symbol, interval="1d")
-    print(response)
-    print(len(response))
+
     result = {
         "min": False,
         "max": False,
