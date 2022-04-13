@@ -2,7 +2,7 @@
 from flask import jsonify
 import requests
 import yfinance as yf
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from binance.client import Client
 #from binance.futures import Futures as Client_Futures
@@ -54,6 +54,7 @@ def is_today_min_high(pair, period):
     ticker = yf.Ticker(pair)
     day_index = period.index("d")
     days = period[0:day_index]
+    coin = pair.replace("-usd", "")
 
     df = ticker.history(period=period)
     result = {
@@ -65,9 +66,10 @@ def is_today_min_high(pair, period):
     min = df['Close'][0]
     max = df['Close'][0]
     print(len(df), days)
+    print(period)
+    print(df)
     if not df.empty and ticker.info and len(df) == int(days):
         for i, row in df.iterrows():
-            print(df['Close'][i])
 
             # El ciclo FOR va iterando vela por vela, si la vela atual es menor que min, min pasa a ser la vela actual
             if row['Close'] < min:
@@ -75,15 +77,14 @@ def is_today_min_high(pair, period):
             elif row['Close'] > max:
                 max = row['Close']
         # .iloc[-1] equivale a la ultima vela, entonces si min = ultima vela,quiere decir que la vela actual (hoy),esta en minimos
-        print("max", max)
-        print("min:", min)
-        print("last:", df['Close'].iloc[-1])
+
         if min == df['Close'].iloc[-1]:
             result['min'] = True
         elif max == df['Close'].iloc[-1]:
             result['max'] = True
     else:
         result['error'] = True
+        return coin_api(coin, int(days))
 
     print("result", result)
     # La funcion retorna un objeto con Min,Max,Error que van a tener valores booleanso (True o False), en el front cuando hago este request a x moneda, si me retorna true,la muestra en la lista de min,max o error
@@ -126,4 +127,45 @@ def historical_price_binance(interval):
     return data
 
 
-is_today_min_high("sol-usd", "7d")
+url = 'https://rest.coinapi.io/v1/exchangerate/BTC/USD/history?period_id=1MIN&time_start=2016-01-01T00:00:00&time_end=2016-02-01T00:00:00'
+headers = {'X-CoinAPI-Key': '72785BE9-0392-4BDA-B115-596C3836840F'}
+response = requests.get(url, headers=headers)
+
+
+def get_initial_date_from_days_back(daysback):
+    today = datetime.today().replace(
+        hour=21, minute=00, second=00, microsecond=00) - timedelta(days=daysback-1)
+    days_back_date = today.isoformat()
+    return days_back_date
+
+
+def coin_api(coin, daysback):
+    print("hello from coin api")
+    days_back = get_initial_date_from_days_back(daysback)
+    now = datetime.now().replace(microsecond=00).isoformat()
+    coin = coin.upper()
+
+    url = f"https://rest.coinapi.io/v1/exchangerate/{coin}/USD/history?period_id=1DAY&time_start={days_back}&time_end={now}"
+    headers = {'X-CoinAPI-Key': '72785BE9-0392-4BDA-B115-596C3836840F'}
+    response = requests.get(url, headers=headers)
+    data = response.json()
+
+    result = {
+        "min": False,
+        "max": False,
+        "error": False
+    }
+    min = data[0]['rate_close']
+    max = data[0]['rate_close']
+    for candle in data:
+        if candle['rate_close'] < min:
+            min = candle['rate_close']
+        elif candle['rate_close'] > max:
+            max = candle['rate_close']
+
+    if min == data[-1]['rate_close'] == min:
+        result['min'] = True
+    elif max == data[-1]['rate_close'] == max:
+        result['max'] = True
+    print(result)
+    return result
