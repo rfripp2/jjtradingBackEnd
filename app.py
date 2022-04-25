@@ -127,7 +127,6 @@ def min_today():
     days_back = request.args.get("days_back")
     pair = request.args.get("pair")
     response = is_today_min_high(pair, days_back)
-    print(response)
     return jsonify(response)
 
 

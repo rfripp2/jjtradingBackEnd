@@ -39,6 +39,7 @@ coins_exceptions = [
     "usdn",
     "stx",
     "ape",
+    "bluna",
 ]
 
 
