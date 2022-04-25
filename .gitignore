@@ -3,3 +3,4 @@ __pycache__
 my-project-env
 db.sqlite
 flask_session
+env
