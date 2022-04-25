@@ -46,6 +46,7 @@ coins_exceptions = [
 # Request al endpoint de coingecko,por pagina max 250, osea que tengo que ajustar la funcion para que si se piden mas de 250, haga otro request a la page=2
 # Este endpoint retorna mucha inf de cada moneda,symbol,mc etc
 def get_coins_inf_cg(quantity):
+
     coins = requests.get(
         f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={quantity}&page=1&sparkline=false",
         timeout=6,
