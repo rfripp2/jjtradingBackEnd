@@ -46,7 +46,7 @@ coins_exceptions = [
 # Request al endpoint de coingecko,por pagina max 250, osea que tengo que ajustar la funcion para que si se piden mas de 250, haga otro request a la page=2
 # Este endpoint retorna mucha inf de cada moneda,symbol,mc etc
 def get_coins_inf_cg(quantity):
-
+    coins_to_request = int(quantity) + len(coins_exceptions)
     coins = requests.get(
         f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={quantity}&page=1&sparkline=false",
         timeout=6,
@@ -79,8 +79,12 @@ def coins_symbols_cg(quantity):
             symbols.append(coin["symbol"])
     if coins_inf["page_two"]:
         for coin in coins_inf["page_two"]:
-            if coin["symbol"] not in coins_exceptions:
+            if (
+                coin["symbol"] not in coins_exceptions
+                and coin["symbol"] not in coins_inf["page_one"]
+            ):
                 symbols.append(coin["symbol"])
+
     return symbols
 
 
@@ -192,7 +196,3 @@ def mins_max_binance(coin, daysback):
         result["max"] = True
 
     return result
-
-
-# mins_max_binance("BTC", 7)
-# is_today_min_high("BTC-usd", "2d")
