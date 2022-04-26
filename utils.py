@@ -111,7 +111,6 @@ def is_today_min_high(pair, period):
 
     df = ticker.history(period=period)
     print(len(df), period)
-    print(df)
     result = {"min": False, "max": False, "error": False}
     # Inicializa min y max como la primera vela
 
@@ -166,11 +165,10 @@ def mins_max_binance(coin, daysback):
     client = Spot()
     msnow = int(round(time.time() * 1000))
     symbol = coin.upper() + "USDT"
-    print("symbol:", symbol)
 
     start_date = datetime.today().replace(
         hour=21, minute=00, second=00, microsecond=00
-    ) - timedelta(days=daysback)
+    ) - timedelta(days=daysback - 1)
 
     start_miliseconds = round(datetime.timestamp(start_date))
 
@@ -192,8 +190,7 @@ def mins_max_binance(coin, daysback):
         result["min"] = True
     elif response[-1][4] == max:
         result["max"] = True
-    print("RESPONSE", coin, response)
-    print(result)
+
     return result
 
 
